@@ -13,7 +13,8 @@ export function Checkout() {
   const { addOrder } = useOrders();
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState('');
-  
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -36,15 +37,15 @@ export function Checkout() {
     }
   }, [isAuthenticated, navigate]);
 
-  // Redirect to cart if empty
+  // Redirect to cart if empty (but not after successful order submission)
   useEffect(() => {
-    if (cartItems.length === 0 && isAuthenticated) {
+    if (cartItems.length === 0 && isAuthenticated && !isSubmitted) {
       navigate('/cart');
     }
-  }, [cartItems.length, navigate, isAuthenticated]);
+  }, [cartItems.length, navigate, isAuthenticated, isSubmitted]);
 
   // Show nothing while redirecting
-  if (cartItems.length === 0 || !isAuthenticated) {
+  if ((cartItems.length === 0 && !isSubmitted) || !isAuthenticated) {
     return null;
   }
 
@@ -64,6 +65,7 @@ export function Checkout() {
     }
 
     // Save order to history
+    setIsSubmitted(true);
     const orderId = addOrder({
       items: cartItems,
       shippingInfo: formData,
