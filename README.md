@@ -1,7 +1,7 @@
 
   # Website W2U Design 
 
-  This is a code bundle for Website W2U Design 
+  This is a code bundle for Website W2U Design updated
 
   ## Running the code
 
